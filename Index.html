@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebGL Water Slosh Demo</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Evan’s core WebGL Water scripts (from the root of evanw/webgl-water) -->
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/lightgl.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/cubemap.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/renderer.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/water.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/main.js"></script>
+</head>
+<body>
+  <!-- placeholders expected by main.js -->
+  <div id="loading">Loading…</div>
+  <div id="help"></div>
+
+  <!-- six hidden cubemap faces for reflections -->
+  <img id="xneg" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xneg.jpg" hidden>
+  <img id="xpos" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xpos.jpg" hidden>
+  <img id="yneg" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/yneg.jpg" hidden>
+  <img id="ypos" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/ypos.jpg" hidden>
+  <img id="zneg" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zneg.jpg" hidden>
+  <img id="zpos" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zpos.jpg" hidden>
+
+  <!-- our custom logic -->
+  <script src="script.js"></script>
+</body>
+</html>
