@@ -1,32 +1,32 @@
-// Utility to log both to console and the on-screen #debug
+// Utility: log to console AND on-screen #debug
 function debugLog(msg) {
   console.log(msg);
   const dbg = document.getElementById('debug');
   if (dbg) dbg.textContent += msg + '\n';
 }
 
-// Catch any uncaught errors and display them
-window.onerror = function(message, source, lineno, colno, error) {
+// Catch uncaught errors
+window.onerror = function(message, source, lineno, colno) {
   debugLog(`❌ Error: ${message} (${source}:${lineno}:${colno})`);
 };
 
-// 1) Sanity check
+// 1) Sanity-check core libs
 debugLog(`GL: ${typeof GL}, Water: ${typeof Water}, window.onload: ${typeof window.onload}`);
 
-// 2) Capture device tilt as a 2D gravity vector
+// 2) Capture device tilt → gravity vector
 let tiltX = 0, tiltY = 0;
 window.addEventListener('deviceorientation', e => {
-  tiltX = (e.gamma  / 90) * 4;   // [-4 .. +4]
-  tiltY = -(e.beta  / 90) * 4;   // [-4 .. +4], inverted
+  tiltX = (e.gamma  / 90) * 4;  // left/right tilt [-4..4]
+  tiltY = -(e.beta / 90) * 4;   // front/back tilt [-4..4], inverted
 });
 
-// 3) Monkey-patch the solver to nudge the water downhill
+// 3) Monkey-patch the solver to nudge water downhill each frame
 ;(function() {
   if (typeof Water !== 'function') {
-    debugLog('❌ Water constructor not found – did water.js load?');
+    debugLog('❌ Water constructor not found – water.js didn’t load?');
     return;
   }
-  const originalStep = Water.prototype.stepSimulation;
+  const origStep = Water.prototype.stepSimulation;
   Water.prototype.stepSimulation = function() {
     const dt = this.deltaTime || 0.016;
     const N  = this.width * this.height;
@@ -34,17 +34,17 @@ window.addEventListener('deviceorientation', e => {
       this.velocity[2*i    ] += tiltX * dt;
       this.velocity[2*i + 1] += tiltY * dt;
     }
-    // run default solver twice
-    originalStep.call(this);
-    originalStep.call(this);
+    // run original solver twice for stability
+    origStep.call(this);
+    origStep.call(this);
   };
-  debugLog('✔️ Water.stepSimulation patched.');
+  debugLog('✔️ Patched Water.stepSimulation');
 })();
 
-// 4) Force-run the init handler from main.js so we actually see the canvas
+// 4) Force-run main.js init() so the canvas is created
 if (typeof window.onload === 'function') {
   debugLog('▶️ Invoking main.js init()…');
   window.onload();
 } else {
-  debugLog('❌ main.js didn’t attach window.onload – the demo will not start.');
+  debugLog('❌ main.js init not found – check script URLs');
 }
