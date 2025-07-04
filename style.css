@@ -3,9 +3,8 @@ html, body {
   padding: 0;
   overflow: hidden;
   height: 100%;
-  background: #000; /* nice backdrop while loading */
+  background: #000;
 }
-
 #loading {
   position: absolute;
   top: 10px;
