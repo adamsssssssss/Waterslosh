@@ -1,0 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  background: #000; /* nice backdrop while loading */
+}
+
+#loading {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #fff;
+  z-index: 10;
+  font-family: sans-serif;
+}
