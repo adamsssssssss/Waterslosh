@@ -3,8 +3,9 @@ html, body {
   padding: 0;
   overflow: hidden;
   height: 100%;
-  background: #000;
+  background: #000; /* fallback background */
 }
+
 #loading {
   position: absolute;
   top: 10px;
