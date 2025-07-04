@@ -17,53 +17,50 @@ document.addEventListener('DOMContentLoaded', () => {
         SUNRAYS_RESOLUTION: 196, SUNRAYS_WEIGHT: 0.8,
     };
 
-    // This function will set up and run the simulation.
-    // It's called ONLY after we have confirmed sensor access.
+    // *** THE FIX IS HERE (Part 1) ***
+    // This is the animation loop. It will be called on every frame.
+    function animate() {
+        if (fluid) {
+            fluid.step(); // This is the crucial line that updates the simulation
+        }
+        requestAnimationFrame(animate); // Request the next frame
+    }
+
     function initializeAndRunSimulation() {
-        // Hide the prompt
         startPrompt.style.opacity = '0';
         setTimeout(() => { startPrompt.style.display = 'none'; }, 500);
 
-        // Initialize the fluid simulation
         fluid = webglFluid.default(canvas, config);
 
-        // Add the initial "water"
         const amount = 20;
         const color = { r: 0.1, g: 0.4, b: 1.0 };
         for (let i = 0; i < amount; i++) {
             fluid.splat(Math.random(), Math.random() * 0.25, 0, 0, color, 2.0);
         }
 
-        // Add the motion listener
         window.addEventListener('devicemotion', handleDeviceMotion);
-        
-        // Add a mouse listener as a fallback for desktop
         canvas.addEventListener('mousemove', handleMouseMove);
+        
+        // *** THE FIX IS HERE (Part 2) ***
+        // We kick off the animation loop once everything is set up.
+        animate();
     }
-
-    // --- Event Listeners ---
-
-    // The main click handler for the start button
+    
     startButton.addEventListener('click', async () => {
-        // This is the modern, robust way to request sensor access on iOS
         if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
             try {
                 const permissionState = await DeviceMotionEvent.requestPermission();
                 if (permissionState === 'granted') {
-                    // Permission granted, let's start!
                     initializeAndRunSimulation();
                 } else {
-                    // Permission denied by the user
                     promptText.textContent = "Sensor access was denied. This experience cannot continue without it.";
-                    startButton.style.display = 'none'; // Hide the button
+                    startButton.style.display = 'none';
                 }
             } catch (error) {
-                // An error occurred, possibly the user dismissed the prompt
                 promptText.textContent = "An error occurred while requesting sensor access.";
                 console.error(error);
             }
         } else {
-            // This runs on devices that don't require explicit permission (e.g., Android)
             initializeAndRunSimulation();
         }
     }, { once: true });
