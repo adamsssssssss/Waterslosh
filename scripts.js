@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Get references to HTML elements
+    // These variable names MUST match the 'id' attributes in index.html
     const canvas = document.getElementById('glcanvas');
     const startPrompt = document.getElementById('start-prompt');
     const startButton = document.getElementById('start-button');
@@ -18,33 +18,28 @@ document.addEventListener('DOMContentLoaded', () => {
         SUNRAYS_RESOLUTION: 196, SUNRAYS_WEIGHT: 0.8,
     };
 
-    // This is the animation loop. It runs on every frame.
     function animate() {
         if (fluid) {
-            fluid.step(); // This crucial line updates and draws the simulation
+            fluid.step();
         }
-        requestAnimationFrame(animate); // Request the next frame
+        requestAnimationFrame(animate);
     }
 
-    // This function sets up and runs the simulation.
     function initializeAndRunSimulation() {
         startPrompt.style.opacity = '0';
         setTimeout(() => { startPrompt.style.display = 'none'; }, 500);
 
-        // *** THE FINAL FIX IS HERE ***
-        // The library call should be webglFluid(), not webglFluid.default()
-        fluid = webglFluid(canvas, config);
+        // THIS IS THE LINE THAT IS FIXED. IT IS NOW CORRECTLY webglFluid.default()
+        fluid = webglFluid.default(canvas, config);
 
         addInitialFluid();
 
         window.addEventListener('devicemotion', handleDeviceMotion);
         canvas.addEventListener('mousemove', handleMouseMove);
         
-        // Kick off the animation loop
         animate();
     }
     
-    // This function adds the initial pool of "water"
     function addInitialFluid() {
         const amount = 20;
         const color = { r: 0.1, g: 0.4, b: 1.0 };
@@ -53,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // This function applies force based on the phone's tilt
     function handleDeviceMotion(event) {
         if (!fluid) return;
         const accel = event.accelerationIncludingGravity;
@@ -65,13 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
         fluid.splat(0.5, 0.5, forceX, forceY, { r: 0, g: 0, b: 0 }, 5.0);
     }
     
-    // Fallback for desktop testing
     function handleMouseMove(e) {
         if (!fluid) return;
         fluid.splat( e.clientX / window.innerWidth, 1.0 - (e.clientY / window.innerHeight), e.movementX * 2, -e.movementY * 2, {r:1, g:1, b:1}, 0.5 );
     }
 
-    // Main event listener for the start button
     startButton.addEventListener('click', async () => {
         if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
             try {
