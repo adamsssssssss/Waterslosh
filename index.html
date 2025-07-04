@@ -2,33 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>WebGL Water Slosh Demo with Debug</title>
+  <title>WebGL Water Slosh Demo</title>
   <link rel="stylesheet" href="style.css">
-
-  <!-- Core WebGL-Water scripts -->
-  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/lightgl.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/cubemap.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/renderer.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/water.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/main.js"></script>
 </head>
 <body>
-  <!-- placeholders expected by main.js -->
+  <!-- 1. Placeholders required by main.js -->
   <div id="loading">Loading…</div>
   <div id="help"></div>
 
-  <!-- six hidden faces for the cubemap reflection -->
-  <img id="xneg" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xneg.jpg" hidden>
-  <img id="xpos" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xpos.jpg" hidden>
-  <img id="yneg" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/yneg.jpg" hidden>
-  <img id="ypos" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/ypos.jpg" hidden>
-  <img id="zneg" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zneg.jpg" hidden>
-  <img id="zpos" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zpos.jpg" hidden>
+  <!-- 2. Cubemap faces (hidden for reflections) -->
+  <img id="xneg"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xneg.jpg"  hidden>
+  <img id="xpos"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xpos.jpg"  hidden>
+  <img id="yneg"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/yneg.jpg"  hidden>
+  <img id="ypos"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/ypos.jpg"  hidden>
+  <img id="zneg"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zneg.jpg"  hidden>
+  <img id="zpos"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zpos.jpg"  hidden>
 
-  <!-- **New** tile texture for the pool walls -->
+  <!-- 3. Tile texture for the pool walls (must be present) -->
   <img id="tiles" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/tiles.jpg" hidden>
 
-  <!-- on-screen debug panel -->
+  <!-- 4. On-screen debug log panel -->
   <div id="debug" style="
     position: absolute;
     bottom: 0; left: 0; right: 0;
@@ -42,7 +35,14 @@
     z-index: 999;
   "></div>
 
-  <!-- your custom logic -->
+  <!-- 5. Core demo scripts (loaded in correct order) -->
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/lightgl.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/cubemap.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/renderer.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/water.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/main.js"></script>
+
+  <!-- 6. Your custom tilt-patch + init hack -->
   <script src="script.js"></script>
 </body>
 </html>
