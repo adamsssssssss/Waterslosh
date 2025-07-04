@@ -11,7 +11,7 @@
     <canvas id="glcanvas"></canvas>
 
     <!-- 
-        A startup prompt is crucial, especially for iOS, 
+        A startup promp is crucial, especially for iOS, 
         which requires user interaction to grant permission for motion sensors.
     -->
     <div id="start-prompt">
