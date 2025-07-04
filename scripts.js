@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Get references to HTML elements
     const canvas = document.getElementById('glcanvas');
     const startPrompt = document.getElementById('start-prompt');
     const startButton = document.getElementById('start-button');
@@ -17,54 +18,42 @@ document.addEventListener('DOMContentLoaded', () => {
         SUNRAYS_RESOLUTION: 196, SUNRAYS_WEIGHT: 0.8,
     };
 
-    // *** THE FIX IS HERE (Part 1) ***
-    // This is the animation loop. It will be called on every frame.
+    // This is the animation loop. It runs on every frame.
     function animate() {
         if (fluid) {
-            fluid.step(); // This is the crucial line that updates the simulation
+            fluid.step(); // This crucial line updates and draws the simulation
         }
         requestAnimationFrame(animate); // Request the next frame
     }
 
+    // This function sets up and runs the simulation.
     function initializeAndRunSimulation() {
         startPrompt.style.opacity = '0';
         setTimeout(() => { startPrompt.style.display = 'none'; }, 500);
 
-        fluid = webglFluid.default(canvas, config);
+        // *** THE FINAL FIX IS HERE ***
+        // The library call should be webglFluid(), not webglFluid.default()
+        fluid = webglFluid(canvas, config);
 
+        addInitialFluid();
+
+        window.addEventListener('devicemotion', handleDeviceMotion);
+        canvas.addEventListener('mousemove', handleMouseMove);
+        
+        // Kick off the animation loop
+        animate();
+    }
+    
+    // This function adds the initial pool of "water"
+    function addInitialFluid() {
         const amount = 20;
         const color = { r: 0.1, g: 0.4, b: 1.0 };
         for (let i = 0; i < amount; i++) {
             fluid.splat(Math.random(), Math.random() * 0.25, 0, 0, color, 2.0);
         }
-
-        window.addEventListener('devicemotion', handleDeviceMotion);
-        canvas.addEventListener('mousemove', handleMouseMove);
-        
-        // *** THE FIX IS HERE (Part 2) ***
-        // We kick off the animation loop once everything is set up.
-        animate();
     }
-    
-    startButton.addEventListener('click', async () => {
-        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-            try {
-                const permissionState = await DeviceMotionEvent.requestPermission();
-                if (permissionState === 'granted') {
-                    initializeAndRunSimulation();
-                } else {
-                    promptText.textContent = "Sensor access was denied. This experience cannot continue without it.";
-                    startButton.style.display = 'none';
-                }
-            } catch (error) {
-                promptText.textContent = "An error occurred while requesting sensor access.";
-                console.error(error);
-            }
-        } else {
-            initializeAndRunSimulation();
-        }
-    }, { once: true });
 
+    // This function applies force based on the phone's tilt
     function handleDeviceMotion(event) {
         if (!fluid) return;
         const accel = event.accelerationIncludingGravity;
@@ -76,8 +65,29 @@ document.addEventListener('DOMContentLoaded', () => {
         fluid.splat(0.5, 0.5, forceX, forceY, { r: 0, g: 0, b: 0 }, 5.0);
     }
     
+    // Fallback for desktop testing
     function handleMouseMove(e) {
         if (!fluid) return;
         fluid.splat( e.clientX / window.innerWidth, 1.0 - (e.clientY / window.innerHeight), e.movementX * 2, -e.movementY * 2, {r:1, g:1, b:1}, 0.5 );
     }
+
+    // Main event listener for the start button
+    startButton.addEventListener('click', async () => {
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            try {
+                const permissionState = await DeviceMotionEvent.requestPermission();
+                if (permissionState === 'granted') {
+                    initializeAndRunSimulation();
+                } else {
+                    promptText.textContent = "Sensor access was denied. This experience cannot continue.";
+                    startButton.style.display = 'none';
+                }
+            } catch (error) {
+                console.error(error);
+                promptText.textContent = "An error occurred while requesting sensor access.";
+            }
+        } else {
+            initializeAndRunSimulation();
+        }
+    }, { once: true });
 });
