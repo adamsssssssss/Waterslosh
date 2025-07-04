@@ -10,16 +10,16 @@
   <div id="loading">Loading…</div>
   <div id="help"></div>
 
-  <!-- 2. Cubemap faces (hidden for reflections) -->
-  <img id="xneg"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xneg.jpg"  hidden>
-  <img id="xpos"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xpos.jpg"  hidden>
-  <img id="yneg"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/yneg.jpg"  hidden>
-  <img id="ypos"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/ypos.jpg"  hidden>
-  <img id="zneg"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zneg.jpg"  hidden>
-  <img id="zpos"  src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zpos.jpg"  hidden>
+  <!-- 2. Cubemap faces (hidden for reflections) with CORS enabled -->
+  <img id="xneg"  crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xneg.jpg"  hidden>
+  <img id="xpos"  crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/xpos.jpg"  hidden>
+  <img id="yneg"  crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/yneg.jpg"  hidden>
+  <img id="ypos"  crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/ypos.jpg"  hidden>
+  <img id="zneg"  crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zneg.jpg"  hidden>
+  <img id="zpos"  crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/zpos.jpg"  hidden>
 
-  <!-- 3. Tile texture for the pool walls (must be present) -->
-  <img id="tiles" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/tiles.jpg" hidden>
+  <!-- 3. Tile texture for the pool walls (also needs crossorigin) -->
+  <img id="tiles" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/tiles.jpg" hidden>
 
   <!-- 4. On-screen debug log panel -->
   <div id="debug" style="
@@ -35,7 +35,7 @@
     z-index: 999;
   "></div>
 
-  <!-- 5. Core demo scripts (loaded in correct order) -->
+  <!-- 5. Core demo scripts (in the correct order) -->
   <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/lightgl.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/cubemap.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/evanw/webgl-water@master/renderer.js"></script>
